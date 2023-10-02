@@ -8,20 +8,17 @@ import (
 	"strings"
 )
 
-// A,X for Rock [1]
-// B,Y for Paper [2]
-// C,Z for Scissors[3]
-// Win [x|y|z] + 6
-// Lose 0
-// Draw 3
+// X means you need to lose,
+// Y means you need to end the round in a draw,
+// and Z means you need to win
 
 func main() {
 	var totalScore int
 	combinations := map[string]map[string]int{
 		"A": {
-			"X": 4,
-			"Y": 8,
-			"Z": 3,
+			"X": 3,
+			"Y": 4,
+			"Z": 8,
 		},
 		"B": {
 			"X": 1,
@@ -29,9 +26,9 @@ func main() {
 			"Z": 9,
 		},
 		"C": {
-			"X": 7,
-			"Y": 2,
-			"Z": 6,
+			"X": 2,
+			"Y": 6,
+			"Z": 7,
 		},
 	}
 
