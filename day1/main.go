@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -20,29 +21,39 @@ func main() {
 	}
 	defer file.Close()
 
-	var highestElf Elf
 	var tempElf Elf
+	var elves []Elf
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		if len(scanner.Text()) == 0 {
-			if tempElf.Cal > highestElf.Cal {
-				highestElf = tempElf
-			}
+			elves = append(elves, tempElf)
 			tempElf.ID = tempElf.ID + 1
 			tempElf.Cal = 0
 			continue
 		}
+
 		calo, err := strconv.Atoi(scanner.Text())
 		if err != nil {
 			fmt.Printf("Invalid int: %s \n", scanner.Text())
 		}
-		tempElf.Cal = tempElf.Cal + calo
-		fmt.Printf("Elf: %v, Calo: %v, Total calo %v \n", tempElf.ID, scanner.Text(), tempElf.Cal)
 
+		tempElf.Cal = tempElf.Cal + calo
+		fmt.Printf("Elf: %v, Cal: %v, Total cal %v \n", tempElf.ID, scanner.Text(), tempElf.Cal)
 	}
+
 	if err := scanner.Err(); err != nil {
 		log.Fatal("Error scanner")
 	}
 
-	fmt.Printf("Elf: %v is carrying the highest calories. (%v)", highestElf.ID, highestElf.Cal)
+	sort.Slice(elves, func(i, j int) bool {
+		return elves[i].Cal > elves[j].Cal
+	})
+	top3Elves := elves[:3]
+	fmt.Printf("top 3 elves with highest calories: %v \n", top3Elves)
+	var totalTop3Cal int
+	for _, elf := range top3Elves {
+		totalTop3Cal = totalTop3Cal + elf.Cal
+	}
+
+	fmt.Printf("total cal for the top 3 elves: %v", totalTop3Cal)
 }
