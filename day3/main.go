@@ -5,24 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"unicode"
 )
 
 func main() {
-	// str := "b"
-	// value := int(str[0] - 'a' + 1)
-	// fmt.Println(value) // prints: 2
-
-	// str = "z"
-	// value = int(str[0] - 'a' + 1)
-	// fmt.Println(value) // prints: 26
-
-	// str = "A"
-	// value = int(str[0] - 'A' + 27)
-	// fmt.Println(value) // prints: 27
-
-	// str = "Z"
-	// value = int(str[0] - 'A' + 27)
-	// fmt.Println(value) // prints: 52
 
 	file, err := os.Open("day3/input.txt")
 	if err != nil {
@@ -30,7 +16,7 @@ func main() {
 	}
 
 	scanner := bufio.NewScanner(file)
-	// var totalRuck int
+	var totalRuck int
 
 	for scanner.Scan() {
 
@@ -60,11 +46,27 @@ func main() {
 			}
 		}
 
-		// TODO: get the key of non zero value in the map
-		// get the unicode value
-		// add to totalRuck
+    var dup string
+    for key := range charCountMap {
+      if charCountMap[key] > 0 {
+        dup = key
+      }
+    }
+    uppercase := unicode.IsUpper([]rune(dup)[0])
+    var charCode int
+    caseText := "Lowercase"
+    if uppercase {
+      caseText = "Uppercase"
+      charCode = int(dup[0] - 'A' + 27)
+    } else {
+      charCode = int(dup[0] - 'a' + 1)
+    }
+    fmt.Printf("Dup ^ is: %v (%v), code: %v \n", dup, caseText, charCode)
+    totalRuck += charCode
 	}
+
 	if err := scanner.Err(); err != nil {
 		log.Fatal("Error scanning file")
 	}
+  fmt.Printf("Total ruck: %v \n", totalRuck)
 }
